@@ -142,10 +142,7 @@ export default function Home() {
   const [enquiry, setEnquiry] = useState<EnquiryResponse | null>(null);
   const [fetchingDetails, setFetchingDetails] = useState(false);
   const [fetchingEnquiry, setFetchingEnquiry] = useState(false);
-  const [loadingAll, setLoadingAll] = useState(false);
-  const [allLoaded, setAllLoaded] = useState(false);
-  const [dropdownBillerId, setDropdownBillerId] = useState("");
-  const [inlineOpen, setInlineOpen] = useState(false);
+
 
   useEffect(() => {
     let aborted = false;
@@ -192,33 +189,7 @@ export default function Home() {
     return () => io.disconnect();
   }, [observerAttached, loading, meta, pageNumber]);
 
-  // Load all billers in background for dropdown
-  useEffect(() => {
-    if (!meta) return;
-    if (allLoaded || loadingAll) return;
-    (async () => {
-      try {
-        setLoadingAll(true);
-        // Start from next page since current page is already fetched
-        const startPage = Math.max(2, meta.currentPage + 1);
-        const total = meta.totalPages || 1;
-        for (let p = startPage; p <= total; p++) {
-          const { records } = await fetchBillers(p, 100, DEFAULT_CATEGORY);
-          setBillers((prev) => {
-            const seen = new Set(prev.map((x) => x.billerId));
-            const merged = [...prev];
-            for (const r of records) if (!seen.has(r.billerId)) merged.push(r);
-            return merged;
-          });
-        }
-        setAllLoaded(true);
-      } catch {
-        // ignore
-      } finally {
-        setLoadingAll(false);
-      }
-    })();
-  }, [meta, allLoaded, loadingAll]);
+  // (dropdown preloading removed)
 
   const openBiller = async (b: Biller) => {
     setSelectedBiller(b);
@@ -235,24 +206,7 @@ export default function Home() {
     }
   };
 
-  const openBillerInline = async (billerId: string) => {
-    const b = billers.find((x) => x.billerId === billerId) || null;
-    setDropdownBillerId(billerId);
-    if (!b) return;
-    setSelectedBiller(b);
-    setInlineOpen(true);
-    setDrawerOpen(false);
-    setBillerDetails(null);
-    setFormData({});
-    setEnquiry(null);
-    try {
-      setFetchingDetails(true);
-      const details = await fetchBillerDetailsApi(b.billerId);
-      setBillerDetails(details);
-    } finally {
-      setFetchingDetails(false);
-    }
-  };
+  // (inline open via dropdown removed)
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -339,30 +293,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Dropdown selector */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Choose FASTag Issuer</label>
-          <div className="flex items-center gap-3">
-            <select
-              value={dropdownBillerId}
-              onChange={(e) => openBillerInline(e.target.value)}
-              className="w-full md:max-w-xl px-4 py-3 border border-lightBg rounded-lg bg-cardBg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="">Select issuer… {loadingAll && "(loading…)"}</option>
-              {billers
-                .slice()
-                .sort((a, b) => a.billerName.localeCompare(b.billerName))
-                .map((b) => (
-                  <option key={b.billerId} value={b.billerId} disabled={!b.isAvailable}>
-                    {b.billerName} {b.isAvailable ? "" : "(unavailable)"}
-                  </option>
-                ))}
-            </select>
-            <span className="text-xs text-gray-500 whitespace-nowrap">
-              {billers.length}{meta?.totalRecords ? ` / ${meta.totalRecords}` : ""} loaded
-            </span>
-          </div>
-        </div>
+
 
         {initialLoading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -422,71 +353,7 @@ export default function Home() {
         )}
       </section>
 
-      {/* Inline details panel */}
-      {inlineOpen && selectedBiller && (
-        <section className="max-w-6xl mx-auto px-4 pb-10">
-          <div className="bg-cardBg border border-lightBg rounded-2xl p-6 shadow-sm">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 shadow-inner overflow-hidden">
-                {selectedBiller.iconUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={selectedBiller.iconUrl} alt={selectedBiller.billerName} className="w-10 h-10 object-contain" />
-                ) : (
-                  <span className="text-2xl">🚗</span>
-                )}
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{selectedBiller.billerName}</div>
-                <div className="text-xs text-gray-500">{selectedBiller.coverage}</div>
-              </div>
-            </div>
 
-            {fetchingDetails && (
-              <div className="animate-pulse space-y-4">
-                <div className="h-5 bg-lightBg rounded w-1/2" />
-                <div className="h-10 bg-lightBg rounded" />
-                <div className="h-10 bg-lightBg rounded" />
-              </div>
-            )}
-            {!fetchingDetails && billerDetails && (
-              <form onSubmit={onSubmit} className="space-y-4">
-                {billerDetails.inputParameters.map((p) => (
-                  <div key={p.paramName}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {p.name} {p.mandatory && <span className="text-red-500">*</span>}
-                    </label>
-                    <input
-                      type={p.dataType === "NUMERIC" ? "tel" : "text"}
-                      value={formData[p.paramName] || ""}
-                      onChange={(e) => setFormData((s) => ({ ...s, [p.paramName]: e.target.value }))}
-                      placeholder={p.desc}
-                      minLength={p.minLength}
-                      maxLength={p.maxLength}
-                      className="w-full px-3 py-2 border border-lightBg rounded focus:outline-none focus:ring-2 focus:ring-primary bg-white"
-                      required={p.mandatory}
-                    />
-                  </div>
-                ))}
-                <button type="submit" className="w-full bg-primary text-white py-2 rounded font-semibold hover:bg-secondary transition">
-                  {fetchingEnquiry ? "Fetching..." : "Verify Amount"}
-                </button>
-              </form>
-            )}
-
-            {!!enquiry && (
-              <div className="mt-6 bg-white border border-lightBg rounded p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-700">Amount</span>
-                  <span className="text-2xl font-bold text-primary">₹{new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(enquiry.amount)}</span>
-                </div>
-                {enquiry.customerName && <div className="text-sm text-gray-600">Customer: <span className="font-medium">{enquiry.customerName}</span></div>}
-                {enquiry.policyStatus && <div className="text-sm text-gray-600">Status: <span className="font-medium">{enquiry.policyStatus}</span></div>}
-                {enquiry.dueDate && <div className="text-sm text-gray-600">Due: <span className="font-medium">{new Date(enquiry.dueDate).toLocaleDateString("en-IN")}</span></div>}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
 
       {/* Slide-over Drawer */}
       {drawerOpen && (

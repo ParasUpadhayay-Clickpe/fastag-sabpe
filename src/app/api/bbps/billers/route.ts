@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 const BASE_URL = "https://api.instantpay.in";
 
 function buildHeaders() {
-    const clientId = process.env.ACCESS || "";
-    const clientSecret = process.env.SECRET || "";
-    const outletId = process.env.OUTLETID || "";
-    const endpointIp = process.env.ENDPOINT_IP || "127.0.0.1";
+    const clientId = process.env.NEXT_PUBLIC_ACCESS || "";
+    const clientSecret = process.env.NEXT_PUBLIC_SECRET || "";
+    const outletId = process.env.NEXT_PUBLIC_OUTLETID || "";
+    const endpointIp = process.env.NEXT_PUBLIC_ENDPOINT_IP || "127.0.0.1";
 
     return {
         Accept: "application/json",
