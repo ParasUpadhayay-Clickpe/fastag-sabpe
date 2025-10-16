@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --background: #E0F2F1;
+  /* lightBg from static site */
+  --foreground: #171717;
+  --color-primary: #0A4A3E;
+  --color-secondary: #147A6A;
+  --color-accent: #1ce0acff;
+  --color-dark: #0B1715;
+  --color-lightBg: #E0F2F1;
+  --color-cardBg: #F0FDF4;
+  --color-textLight: #A7D9D3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-dark: var(--color-dark);
+  --color-lightBg: var(--color-lightBg);
+  --color-cardBg: var(--color-cardBg);
+  --color-textLight: var(--color-textLight);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Keep light theme background to avoid unintended dark screens */
+    --background: #E0F2F1;
+    --foreground: #171717;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
