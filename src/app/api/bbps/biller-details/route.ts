@@ -2,24 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const BASE_URL = "https://api.instantpay.in";
-
-function buildHeaders() {
-    const clientId = process.env.NEXT_PUBLIC_ACCESS || "";
-    const clientSecret = process.env.NEXT_PUBLIC_SECRET || "";
-    const outletId = process.env.NEXT_PUBLIC_OUTLETID || "";
-    const endpointIp = process.env.NEXT_PUBLIC_ENDPOINT_IP || "127.0.0.1";
-
-    return {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Ipay-Auth-Code": "1",
-        "X-Ipay-Client-Id": clientId,
-        "X-Ipay-Client-Secret": clientSecret,
-        "X-Ipay-Endpoint-Ip": endpointIp,
-        "X-Ipay-Outlet-Id": outletId,
-    } as Record<string, string>;
-}
+const LAMBDA_BASE = (process.env.NEXT_PUBLIC_BBPS_PROXY_URL || "https://4vtfgim3z4.execute-api.ap-south-1.amazonaws.com/dev").replace(/\/$/, "");
 
 export async function POST(request: Request) {
     try {
@@ -27,9 +10,9 @@ export async function POST(request: Request) {
         const billerId = body?.billerId;
         if (!billerId) return NextResponse.json({ error: "billerId is required" }, { status: 400 });
 
-        const res = await fetch(`${BASE_URL}/marketplace/utilityPayments/billerDetails`, {
+        const res = await fetch(`${LAMBDA_BASE}/bbps/biller-details`, {
             method: "POST",
-            headers: buildHeaders(),
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ billerId }),
             cache: "no-store" as RequestCache,
         });

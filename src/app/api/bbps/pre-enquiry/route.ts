@@ -2,31 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const BASE_URL = "https://api.instantpay.in";
-
-function extractClientIp(request: Request) {
-    const xForwardedFor = request.headers.get("x-forwarded-for") || "";
-    const xRealIp = request.headers.get("x-real-ip") || "";
-    const ipFromXff = xForwardedFor.split(",")[0]?.trim();
-    return ipFromXff || xRealIp || process.env.NEXT_PUBLIC_ENDPOINT_IP || "127.0.0.1";
-}
-
-function buildHeaders() {
-    const clientId = process.env.NEXT_PUBLIC_ACCESS || "";
-    const clientSecret = process.env.NEXT_PUBLIC_SECRET || "";
-    const outletId = process.env.NEXT_PUBLIC_OUTLETID || "";
-    const endpointIp = process.env.NEXT_PUBLIC_ENDPOINT_IP || "127.0.0.1";
-
-    return {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Ipay-Auth-Code": "1",
-        "X-Ipay-Client-Id": clientId,
-        "X-Ipay-Client-Secret": clientSecret,
-        "X-Ipay-Endpoint-Ip": endpointIp,
-        "X-Ipay-Outlet-Id": outletId,
-    } as Record<string, string>;
-}
+const LAMBDA_BASE = (process.env.NEXT_PUBLIC_BBPS_PROXY_URL || "https://4vtfgim3z4.execute-api.ap-south-1.amazonaws.com/dev").replace(/\/$/, "");
 
 export async function POST(request: Request) {
     try {
@@ -36,18 +12,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "billerId, inputParameters, externalRef are required" }, { status: 400 });
         }
 
-        const clientIp = extractClientIp(request);
-
-        const res = await fetch(`${BASE_URL}/marketplace/utilityPayments/prePaymentEnquiry`, {
+        const res = await fetch(`${LAMBDA_BASE}/bbps/pre-enquiry`, {
             method: "POST",
-            headers: buildHeaders(),
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 billerId,
-                initChannel: "AGT",
-                externalRef,
                 inputParameters,
-                deviceInfo: { ip: clientIp, mac: "WEB-CLIENT" },
-                remarks: inputParameters,
+                externalRef,
                 transactionAmount: transactionAmount ?? 0,
             }),
             cache: "no-store" as RequestCache,
