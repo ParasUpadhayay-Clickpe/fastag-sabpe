@@ -41,8 +41,6 @@ export default function RootLayout({
               <a href="/#about-us" className="font-medium text-gray-700 hover:text-primary transition duration-300">About Us</a>
               <a href="/#contact-us" className="font-medium text-gray-700 hover:text-primary transition duration-300">Contact</a>
               <Link href="/fastag-recharge" className="font-medium text-gray-700 hover:text-primary transition duration-300">Recharge</Link>
-              <a href="https://SabPe.in/login.php" className="font-medium text-gray-700 hover:text-primary transition duration-300 ml-auto">Login</a>
-              <a href="https://SabPe.in/register.php" className="bg-primary text-white px-6 py-2 rounded-md font-bold hover:bg-secondary transition duration-300 shadow-md">Register</a>
             </nav>
             <button className="md:hidden text-gray-600 focus:outline-none">☰</button>
           </div>
@@ -77,7 +75,7 @@ export default function RootLayout({
               <div>
                 <h4 className="text-xl font-bold mb-6 text-accent">Contact Us</h4>
                 <ul className="space-y-4 text-gray-400">
-                  <li className="flex items-start">📍<span className="ml-3">Surat, Gujarat</span></li>
+                  <li className="flex items-start">📍<span className="ml-3">UG 150, Marvella Corridor, VIP Road, Vesu, Surat -  395007</span></li>
                   <li className="flex items-center">📞<span className="ml-3">+91 93272 82729</span></li>
                   <li className="flex items-center">✉️<span className="ml-3">support@sabpe.com</span></li>
                   <li className="flex items-center">⏰<span className="ml-3">Mon-Sat: 9:00 AM - 6:00 PM</span></li>
