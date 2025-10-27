@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SabPe FASTag - Fast, Secure FASTag Recharge",
+  title: "FASTag - Fast, Secure FASTag Recharge",
   description: "Recharge FASTag securely and instantly with SabPe.",
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
           <div className="container mx-auto flex justify-between items-center p-4">
             <Link href="/" className="flex items-center">
               <div className="bg-primary p-3 rounded-lg mr-3 shadow-md">🚗</div>
-              <span className="text-2xl font-bold text-primary">SabPe FASTag</span>
+              <span className="text-2xl font-bold text-primary">FASTag</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-8">
               <a href="/#hero" className="font-medium text-gray-700 hover:text-primary transition duration-300">Home</a>
@@ -54,7 +54,7 @@ export default function RootLayout({
               <div>
                 <div className="flex items-center mb-6">
                   <div className="bg-primary p-3 rounded-lg mr-3 shadow-md">🚗</div>
-                  <h3 className="text-2xl font-bold">SabPe FASTag</h3>
+                  <h3 className="text-2xl font-bold">FASTag</h3>
                 </div>
                 <p className="text-gray-400 mb-6 leading-relaxed">Fast, secure FASTag recharge with a clean, guided experience.</p>
                 <div className="flex space-x-5 mt-6 text-xl">
