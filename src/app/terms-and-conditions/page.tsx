@@ -13,7 +13,7 @@ export default function TermsAndConditionsPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Registration</h2>
                 <p className="mb-6">Provide true, accurate, current and complete information. "KB Topay Finnovative LLP" may reject or terminate access for violations.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Payment Types</h2>
-                <p className="mb-6">Services include Rent, Utility, Vendor, GST and others as specified. Users are responsible for tax implications.</p>
+                <p className="mb-6">Services include FASTag as specified. Users are responsible for tax implications.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">User Obligations</h2>
                 <ul className="list-disc list-inside mb-6 space-y-2">
                     <li>Provide accurate information and maintain required licenses</li>
@@ -28,7 +28,7 @@ export default function TermsAndConditionsPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Limitation of Liability</h2>
                 <p className="mb-6">To the maximum extent permitted by law, "KB Topay Finnovative LLP" is not liable for indirect or consequential damages.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Contact Information</h2>
-                <p className="mb-6">For queries, contact support@sabpe.com.</p>
+                <p className="mb-6">For queries, contact +91 93272 82729.</p>
             </div>
         </main>
     );

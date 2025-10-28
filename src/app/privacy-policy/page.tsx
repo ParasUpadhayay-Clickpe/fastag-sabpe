@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
             <div className="prose prose-lg max-w-none text-gray-700">
                 <p className="mb-6">
-                    ["SabPe KB Topay Finnovative LLP", "we" or "us"] is committed to protecting your information and privacy. This
+                    ["KB Topay Finnovative LLP", "we" or "us"] is committed to protecting your information and privacy. This
                     Privacy Policy is designed to help you understand how we may collect, process, store and use the
                     information you provide to us and to assist you in making informed decisions while using our Service.
                 </p>
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">9. Information Security</h2>
                 <p className="mb-6">"KB Topay Finnovative LLP" employs stringent security measures. Sensitive information is encrypted.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">10. Contact Us</h2>
-                <p className="mb-6">For queries regarding this Privacy Policy, contact support@sabpe.com.</p>
+                <p className="mb-6">For queries regarding this Privacy Policy, contact +91 93272 82729</p>
             </div>
         </main>
     );

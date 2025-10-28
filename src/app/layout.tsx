@@ -77,14 +77,12 @@ export default function RootLayout({
                 <ul className="space-y-4 text-gray-400">
                   <li className="flex items-start">📍<span className="ml-3">UG 150, Marvella Corridor, VIP Road, Vesu, Surat -  395007</span></li>
                   <li className="flex items-center">📞<span className="ml-3">+91 93272 82729</span></li>
-                  <li className="flex items-center">✉️<span className="ml-3">support@sabpe.com</span></li>
                   <li className="flex items-center">⏰<span className="ml-3">Mon-Sat: 9:00 AM - 6:00 PM</span></li>
                 </ul>
               </div>
             </div>
             <div className="pt-8 border-t border-gray-800">
               <div className="flex flex-col md:flex-row justify-between items-center">
-                <p className="text-gray-500 text-sm">© {new Date().getFullYear()} SabPe. All rights reserved.</p>
                 <div className="flex space-x-8 mt-4 md:mt-0">
                   <Link href="/privacy-policy" className="text-gray-500 hover:text-white transition duration-300">Privacy Policy</Link>
                   <Link href="/terms-and-conditions" className="text-gray-500 hover:text-white transition duration-300">Terms of Service</Link>
