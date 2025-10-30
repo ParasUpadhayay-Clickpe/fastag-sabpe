@@ -107,6 +107,21 @@ type EnquiryResponse = {
   dueDate?: string;
 };
 
+function extractErrorStatus(data: any): string {
+  try {
+    return (
+      data?.error ||
+      data?.status ||
+      data?.error?.status ||
+      (typeof data?.error === "string" ? data.error : "") ||
+      data?.message ||
+      "An error occurred"
+    );
+  } catch {
+    return "An error occurred";
+  }
+}
+
 async function preEnquiryApi(billerId: string, inputParameters: Record<string, string>): Promise<EnquiryResponse> {
   const externalRef = `SABPE_${Date.now()}`;
   const res = await fetch("/api/bbps/pre-enquiry", {
@@ -115,13 +130,32 @@ async function preEnquiryApi(billerId: string, inputParameters: Record<string, s
     body: JSON.stringify({ billerId, inputParameters, externalRef }),
   });
   const data: any = await res.json();
+
+  // Check for HTTP errors
+  if (!res.ok) {
+    const msg = extractErrorStatus(data) || "Failed to fetch recharge details";
+    throw new Error(msg);
+  }
+
+  // Check for error status codes in the response
+  const statuscode = data?.statuscode || data?.error?.statuscode;
+  const status = data?.status || data?.error?.status;
+  const errorStatusCodes = ["ERR", "IAN", "INV", "NF", "NA"];
+  const hasErrorStatusCode = statuscode && errorStatusCodes.includes(String(statuscode).toUpperCase());
+  const hasErrorStatus = status && /invalid|error|failed|not found|unavailable/i.test(String(status));
+
+  if (hasErrorStatusCode || hasErrorStatus) {
+    const msg = extractErrorStatus(data) || "Invalid request";
+    throw new Error(msg);
+  }
+
   const e = data?.data || data;
   return {
     enquiryReferenceId: e?.enquiryReferenceId || externalRef,
-    amount: e?.amount ?? 0,
-    customerName: e?.customerName,
+    amount: e?.BillAmount ?? e?.amount ?? 0,
+    customerName: e?.CustomerName || e?.customerName,
     policyStatus: e?.policyStatus,
-    dueDate: e?.dueDate,
+    dueDate: e?.BillDueDate || e?.dueDate,
   };
 }
 
